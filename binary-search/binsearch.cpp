@@ -12,12 +12,13 @@ void print(const C& collection, std::ostream& out = std::cout) {
     out << '\n';
 }
 
+//template <typename T>
 int binary_search(const int* const arr, int size, int elem) {
-    int si = 0;
-    int ei = size - 1;
+    auto si = std::begin(arr);
+    auto ei = std::end(arr) - 1;
     if ((ei - si) <= 0) return -1;
     do {
-        int mi = (si + ei) / 2;
+        auto mi = (si + ei) / 2;
         if (arr[mi] > elem) {
             ei = mi - 1;
         } else if (arr[mi] < elem) {
@@ -31,7 +32,7 @@ int binary_search(const int* const arr, int size, int elem) {
 
 int main() {
     std::ostream& out = std::cout;
-    int arr[] = {4, 9, 10, 16, 32, 40, 42, 64, 96, 100};
+    int arr[] = {4, 9, 10, 16, 17, 32, 40, 42, 64, 96, 100};
     print(arr);
     const int SIZE = sizeof arr / sizeof (int);
     for (int elem : arr) {
