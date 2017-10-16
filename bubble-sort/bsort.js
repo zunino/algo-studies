@@ -8,12 +8,8 @@ function bubbleSort(coll) {
     do {
         swapped = false;
         for (let i = 0; i <= (len - 2); ++i) {
-            let e1 = sorted[i];
-            let e2 = sorted[i + 1];
-            if (e1 > e2) {
-                let tmp = e1;
-                sorted[i] = sorted[i + 1];
-                sorted[i + 1] = tmp;
+            if (sorted[i] > sorted[i + 1]) {
+                [sorted[i], sorted[i + 1]] = [sorted[i + 1], sorted[i]];
                 swapped = true;
             }
         }
