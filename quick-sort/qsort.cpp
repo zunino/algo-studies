@@ -32,18 +32,21 @@ void quicksort(std::vector<int>& coll, int start, int end) {
         return;
     }
     int pivot = coll[start];
-    int wall = start;
-    for (int i = 1; i < end; ++i) {
+    int wall = start + 1;
+    for (int i = wall; i < end; ++i) {
         int elem = coll[i];
         if (pivot > elem) {
-            coll[i] = coll[wall];
-            coll[wall++] = elem;
+            if (i != wall) {
+                coll[i] = coll[wall];
+                coll[wall] = elem;
+            }
+            ++wall;
         }
     }
-    // Need to move the pivot to *wall, its final location.
-    // The question is: where is the pivot?
+    coll[start] = coll[wall - 1];
+    coll[wall - 1] = pivot;
     quicksort(coll, start, wall);
-    quicksort(coll, wall + 1, end);
+    quicksort(coll, wall, end);
 }
 
 void test_quicksort(std::initializer_list<int> elements,
@@ -61,9 +64,11 @@ void test_quicksort(std::initializer_list<int> elements,
 }
 
 int main() {
-    //test_quicksort({7},                 {7});
-    //test_quicksort({7, 4},              {4, 7});
-    //test_quicksort({7, 4, 9},           {4, 7, 9});
-    test_quicksort({4, 3, 19, 6, 2},    {2, 3, 4, 6, 19});
+    test_quicksort({7}, {7});
+    test_quicksort({7, 4}, {4, 7});
+    test_quicksort({7, 4, 9}, {4, 7, 9});
+    test_quicksort({4, 3, 19, 6, 2}, {2, 3, 4, 6, 19});
+    test_quicksort({5, 8, 2, 6, 9, 1}, {1, 2, 5, 6, 8, 9});
+    test_quicksort({4, 10, 1, 6, 3, 8, 2, 4, 0, 5}, {0, 1, 2, 3, 4, 4, 5, 6, 8, 10});
 }
 
