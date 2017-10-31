@@ -3,6 +3,9 @@
  *
  * Andre Zunino
  * 16 May 2015
+ *
+ * Revised on October 2017 to make the changes in-place, reducing the overall
+ * runtime complexity of the algorithm.
  */
  
 #include <vector>
@@ -24,35 +27,31 @@ void println(const H& heading, const C& coll) {
     std::cout << '\n';
 }
 
-std::vector<int> quicksort(const std::vector<int>& coll) {
-    if (coll.size() < 2) {
-        return coll;
+void quicksort(std::vector<int>& coll, int start, int end) {
+    if ((end - start < 2) || coll.size() < 2) {
+        return;
     }
-    int pivot = coll[0];
-    std::vector<int> left;
-    std::vector<int> right;
-    for (int i = 1; i < coll.size(); ++i) {
+    int pivot = coll[start];
+    int wall = start;
+    for (int i = 1; i < end; ++i) {
         int elem = coll[i];
-        if (elem > pivot) {
-            right.push_back(elem);
-        } else {
-            left.push_back(elem);
+        if (pivot > elem) {
+            coll[i] = coll[wall];
+            coll[wall++] = elem;
         }
     }
-    left = quicksort(left);
-    right = quicksort(right);
-    std::vector<int> rearranged_coll;
-    rearranged_coll.insert(rearranged_coll.end(), left.begin(), left.end());
-    rearranged_coll.push_back(pivot);
-    rearranged_coll.insert(rearranged_coll.end(), right.begin(), right.end());
-    return rearranged_coll;
+    // Need to move the pivot to *wall, its final location.
+    // The question is: where is the pivot?
+    quicksort(coll, start, wall);
+    quicksort(coll, wall + 1, end);
 }
 
 void test_quicksort(std::initializer_list<int> elements,
                     std::initializer_list<int> sorted_elements) {
     assert (elements.size() == sorted_elements.size());
     std::vector<int> vec { elements };
-    std::vector<int> sorted_vec = quicksort(vec);
+    std::vector<int> sorted_vec(vec);
+    quicksort(sorted_vec, 0, sorted_vec.size());
     std::cout << "quicksort { ";
     print("", elements);
     std::cout << "} : ";
@@ -62,9 +61,9 @@ void test_quicksort(std::initializer_list<int> elements,
 }
 
 int main() {
-    test_quicksort({7},                 {7});
-    test_quicksort({7, 4},              {4, 7});
-    test_quicksort({7, 4, 9},           {4, 7, 9});
+    //test_quicksort({7},                 {7});
+    //test_quicksort({7, 4},              {4, 7});
+    //test_quicksort({7, 4, 9},           {4, 7, 9});
     test_quicksort({4, 3, 19, 6, 2},    {2, 3, 4, 6, 19});
 }
 
