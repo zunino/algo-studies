@@ -16,8 +16,13 @@
 template <typename H, typename C>
 void print(const H& heading, const C& coll) {
     std::cout << heading;
-    for (typename C::value_type elem : coll) {
-        std::cout << elem << ' ';
+    int size = coll.size();
+    int i = 0;
+    for (typename C::const_reference elem : coll) {
+        std::cout << elem;
+        if (++i < size) {
+            std::cout << ' ';
+        }
     }
 }
 
@@ -55,10 +60,10 @@ void test_quicksort(std::initializer_list<int> elements,
     std::vector<int> vec { elements };
     std::vector<int> sorted_vec(vec);
     quicksort(sorted_vec, 0, sorted_vec.size());
-    std::cout << "quicksort { ";
-    print("", elements);
-    std::cout << "} : ";
-    println("", sorted_vec);
+    print("[", elements);
+    std::cout << "] => [";
+    print("", sorted_vec);
+    std::cout << "]\n";
     assert (sorted_vec.size() == elements.size());
     assert (std::equal(sorted_vec.begin(), sorted_vec.end(), sorted_elements.begin()));
 }
