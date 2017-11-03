@@ -18,7 +18,7 @@ func quicksort(coll []int) {
         }
     }
     coll[0], coll[wall - 1] = coll[wall - 1], coll[0]
-    quicksort(coll[0:wall])
+    quicksort(coll[0:wall - 1])
     quicksort(coll[wall:])
 }
 
@@ -28,7 +28,9 @@ func main() {
         {7, 4},
         {7, 4, 9},
         {4, 3, 19, 6, 2},
+        {5, 8, 2, 6, 9, 1},
         {2, 8, 5, 9, 3, 1, 4, 5},
+        {4, 10, 1, 6, 3, 8, 2, 4, 0, 5},
     }
     for i := range input {
         elem := input[i]

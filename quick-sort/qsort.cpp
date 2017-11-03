@@ -50,7 +50,7 @@ void quicksort(std::vector<int>& coll, int start, int end) {
     }
     coll[start] = coll[wall - 1];
     coll[wall - 1] = pivot;
-    quicksort(coll, start, wall);
+    quicksort(coll, start, wall - 1);
     quicksort(coll, wall, end);
 }
 
@@ -74,6 +74,7 @@ int main() {
     test_quicksort({7, 4, 9}, {4, 7, 9});
     test_quicksort({4, 3, 19, 6, 2}, {2, 3, 4, 6, 19});
     test_quicksort({5, 8, 2, 6, 9, 1}, {1, 2, 5, 6, 8, 9});
+    test_quicksort({2, 8, 5, 9, 3, 1, 4, 5}, {1, 2, 3, 4, 5, 5, 8, 9});
     test_quicksort({4, 10, 1, 6, 3, 8, 2, 4, 0, 5}, {0, 1, 2, 3, 4, 4, 5, 6, 8, 10});
 }
 
