@@ -26,45 +26,40 @@ func make_b64_slice(src []byte) []byte {
     return make([]byte, triplets * 4)
 }
 
+func encodeTriplet(b1, b2, b3 byte, b64 []byte, di int) {
+    b64[di + 0] = table[b1 >> 2]                      // 6 most-significant bits of byte 1
+    b64[di + 1] = table[b1 & 0x3 << 4 + b2 >> 4]    // 2 bits from byte 1 plus 4 from byte 2 
+    b64[di + 2] = table[b2 & 0x0f << 2 + b3 >> 6]
+    b64[di + 3] = table[b3 & 0x3f]
+}
+
 func base64enc(text string) string {
     src := []byte(text)
-    mod3 := len(src) % 3
+    srclen := len(src)
+    triplets := srclen / 3
+    mod3 := srclen % 3
     padding := 0
     if mod3 != 0 {
         padding = 3 - mod3
     }
     b64 := make_b64_slice(src)
-    srclen := len(src)
+    si := 0
     di := 0
-    for si := 0; si < srclen; {
-        b1 := src[si]
-        b64[di] = table[b1 >> 2]                      // 6 most-significant bits of byte 1
-        di++
-        si++
-        if si == srclen {
-            b64[di] = table[b1 & 0x3 << 4]
-            di++
-            break;
-        }
-        b2 := src[si]
-        b64[di] = table[(b1 & 0x3) << 4 + b2 >> 4]    // 2 bits from byte 1 plus 4 from byte 2 
-        di++
-        si++
-        if si == srclen {
-            b64[di] = table[b2 & 0x0f << 2]
-            di++
-            break;
-        }
-        b3 := src[si]
-        si++
-        b64[di] = table[(b2 & 0x0f) << 2 + b3 >> 6]
-        di++
-        b64[di] = table[b3 & 0x3f]
-        di++
+    for i := 0; i < triplets; i++ {
+        b1 := src[si + 0]
+        b2 := src[si + 1]
+        b3 := src[si + 2]
+        encodeTriplet(b1, b2, b3, b64, di)
+        si += 3
+        di += 4
     }
-    for i := 0; i < padding; i++ {
-        b64[di] = paddingchar
-        di++
+    if padding == 2 {
+        encodeTriplet(src[si + 0], 0, 0, b64, di)
+        b64[di + 2] = paddingchar
+        b64[di + 3] = paddingchar
+    } else if padding == 1 {
+        encodeTriplet(src[si + 0], src[si + 1], 0, b64, di)
+        b64[di + 3] = paddingchar
     }
     return string(b64)
 }
