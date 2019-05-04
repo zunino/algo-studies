@@ -1,4 +1,4 @@
-package main
+package b64enc
 
 import (
     "testing"
@@ -26,7 +26,7 @@ func Test_make_b64_slice_for_input_A(t *testing.T) {
 }
 
 func Test_encode_ABC(t *testing.T) {
-    result := base64enc("ABC")
+    result := Base64enc("ABC")
     expected := "QUJD"
     if result != expected {
         t.Errorf("ABC should have been encoded as %s (was %s)", expected, result)
@@ -34,7 +34,7 @@ func Test_encode_ABC(t *testing.T) {
 }
 
 func Test_encode_AB(t *testing.T) {
-    result := base64enc("AB")
+    result := Base64enc("AB")
     expected := "QUI="
     if result != expected {
         t.Errorf("AB should have been encoded as %s (was %s)", expected, result)
@@ -42,7 +42,7 @@ func Test_encode_AB(t *testing.T) {
 }
 
 func Test_encode_A(t *testing.T) {
-    result := base64enc("A")
+    result := Base64enc("A")
     expected := "QQ=="
     if result != expected {
         t.Errorf("A should have been encoded as %s (was %s)", expected, result)
@@ -55,7 +55,7 @@ func Test_encode_big_sentence(t *testing.T) {
                 `mind, that by a perseverance of delight in the continued ` +
                 `and indefatigable generation of knowledge, exceeds the ` +
                 `short vehemence of any carnal pleasure.`
-    result := base64enc(sentence)
+    result := Base64enc(sentence)
     expected := `TWFuIGlzIGRpc3Rpbmd1aXNoZWQsIG5vdCBvbmx5IGJ5IGhpcyByZWFzb24s` +
                 `IGJ1dCBieSB0aGlzIHNpbmd1bGFyIHBhc3Npb24gZnJvbSBvdGhlciBhbmlt` +
                 `YWxzLCB3aGljaCBpcyBhIGx1c3Qgb2YgdGhlIG1pbmQsIHRoYXQgYnkgYSBw` +

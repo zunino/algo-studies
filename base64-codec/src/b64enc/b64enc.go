@@ -1,11 +1,6 @@
-package main
+package b64enc
 
-import (
-    "os"
-    "fmt"
-)
-
-var table = [64]byte {
+var enctable = [64]byte {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
     'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
@@ -27,13 +22,13 @@ func make_b64_slice(src []byte) []byte {
 }
 
 func encodeTriplet(b1, b2, b3 byte, b64 []byte, di int) {
-    b64[di + 0] = table[b1 >> 2]                      // 6 most-significant bits of byte 1
-    b64[di + 1] = table[b1 & 0x3 << 4 + b2 >> 4]    // 2 bits from byte 1 plus 4 from byte 2 
-    b64[di + 2] = table[b2 & 0x0f << 2 + b3 >> 6]
-    b64[di + 3] = table[b3 & 0x3f]
+    b64[di + 0] = enctable[b1 >> 2]                      // 6 most-significant bits of byte 1
+    b64[di + 1] = enctable[b1 & 0x3 << 4 + b2 >> 4]    // 2 bits from byte 1 plus 4 from byte 2 
+    b64[di + 2] = enctable[b2 & 0x0f << 2 + b3 >> 6]
+    b64[di + 3] = enctable[b3 & 0x3f]
 }
 
-func base64enc(text string) string {
+func Base64enc(text string) string {
     src := []byte(text)
     srclen := len(src)
     triplets := srclen / 3
@@ -62,14 +57,5 @@ func base64enc(text string) string {
         b64[di + 3] = paddingchar
     }
     return string(b64)
-}
-
-func main() {
-    if len(os.Args) != 2 {
-        fmt.Fprintf(os.Stderr, "Wrong number of arguments.\n")
-        os.Exit(1)
-    }
-    encoded := base64enc(os.Args[1])
-    fmt.Println(encoded)
 }
 
