@@ -1,8 +1,7 @@
 package b64dec
 
 import (
-    "os"
-    "fmt"
+    "errors"
 )
 
 // This table holds the 64 sextets (6-bit patterns) from the Base64 encoding table.
@@ -40,16 +39,15 @@ func decode3bytes(src string, si int, dst []byte, di int) {
     dst[di + 2] = sextet3 << 6 + sextet4;
 }
 
-func Base64dec(src string) string {
+func Base64dec(src string) (string, error) {
     srclen := len(src)
     quadruplets := srclen / 4
     mod4 := srclen % 4
     if mod4 != 0 {
-        fmt.Fprintf(os.Stderr, "Invalid Base64 input.\n")
-        os.Exit(1)
+        return "", errors.New("Invalid Base64 input.")
     }
     if quadruplets == 0 {
-        return ""
+        return "", nil
     }
     padding := 0
     if src[srclen - 1] == paddingchar {
@@ -75,6 +73,6 @@ func Base64dec(src string) string {
     } else if padding == 2 {
         decode1byte(src, si, text, di)
     }
-    return string(text)
+    return string(text), nil
 }
 

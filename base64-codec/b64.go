@@ -16,7 +16,12 @@ func main() {
     if op == "e" {
         fmt.Println(b64enc.Base64enc(os.Args[2]))
     } else if op == "d" {
-        fmt.Println(b64dec.Base64dec(os.Args[2]))
+        result, err := b64dec.Base64dec(os.Args[2])
+        if err != nil {
+            fmt.Fprintf(os.Stderr, "%s\n", err.Error())
+            os.Exit(1)
+        }
+        fmt.Println(result)
     } else {
         fmt.Fprintf(os.Stderr, "Invalid operation.\n")
         os.Exit(1)
