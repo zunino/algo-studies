@@ -9,18 +9,6 @@ var enctable = [64]byte {
 
 const paddingchar = '='
 
-// make_b64_slice creates a byte slice with a calculated length to hold the Base64-
-// encoded version of text.
-func make_b64_slice(src []byte) []byte {
-    srclen := len(src)
-    triplets := srclen / 3
-    mod3 := srclen % 3
-    if mod3 != 0 {
-        triplets++
-    }
-    return make([]byte, triplets * 4)
-}
-
 func encodeTriplet(b1, b2, b3 byte, b64 []byte, di int) {
     b64[di + 0] = enctable[b1 >> 2]                      // 6 most-significant bits of byte 1
     b64[di + 1] = enctable[b1 & 0x3 << 4 + b2 >> 4]    // 2 bits from byte 1 plus 4 from byte 2 
@@ -28,23 +16,21 @@ func encodeTriplet(b1, b2, b3 byte, b64 []byte, di int) {
     b64[di + 3] = enctable[b3 & 0x3f]
 }
 
-func Base64enc(text string) string {
-    src := []byte(text)
+func Base64enc(src string) string {
     srclen := len(src)
     triplets := srclen / 3
     mod3 := srclen % 3
     padding := 0
+    b64len := triplets * 4
     if mod3 != 0 {
         padding = 3 - mod3
+        b64len += 4
     }
-    b64 := make_b64_slice(src)
+    b64 := make([]byte, b64len)
     si := 0
     di := 0
     for i := 0; i < triplets; i++ {
-        b1 := src[si + 0]
-        b2 := src[si + 1]
-        b3 := src[si + 2]
-        encodeTriplet(b1, b2, b3, b64, di)
+        encodeTriplet(src[si + 0], src[si + 1], src[si + 2], b64, di)
         si += 3
         di += 4
     }

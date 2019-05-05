@@ -20,28 +20,27 @@ var dectable = [80]byte {
 const toffset = 43
 const paddingchar = '='
 
-func decode1byte(src []byte, si int, dst []byte, di int) {
+func decode1byte(src string, si int, dst []byte, di int) {
     sextet1 := dectable[src[si + 0] - toffset]
     sextet2 := dectable[src[si + 1] - toffset]
     dst[di + 0] = sextet1 << 2 + sextet2 >> 4;
 }
 
-func decode2bytes(src []byte, si int, dst []byte, di int) {
+func decode2bytes(src string, si int, dst []byte, di int) {
     decode1byte(src, si, dst, di)
     sextet2 := dectable[src[si + 1] - toffset]
     sextet3 := dectable[src[si + 2] - toffset]
     dst[di + 1] = sextet2 << 4 + sextet3 >> 2;
 }
 
-func decode3bytes(src []byte, si int, dst []byte, di int) {
+func decode3bytes(src string, si int, dst []byte, di int) {
     decode2bytes(src, si, dst, di)
     sextet3 := dectable[src[si + 2] - toffset]
     sextet4 := dectable[src[si + 3] - toffset]
     dst[di + 2] = sextet3 << 6 + sextet4;
 }
 
-func Base64dec(b64 string) string {
-    src := []byte(b64)
+func Base64dec(src string) string {
     srclen := len(src)
     quadruplets := srclen / 4
     mod4 := srclen % 4

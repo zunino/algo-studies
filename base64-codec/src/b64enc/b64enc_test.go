@@ -4,27 +4,6 @@ import (
     "testing"
 )
 
-func Test_make_b64_slice_for_input_ABC(t *testing.T) {
-    result := make_b64_slice([]byte("ABC"))
-    if len(result) != 4 {
-        t.Errorf("Length should have been 4")
-    }
-}
-
-func Test_make_b64_slice_for_input_AB(t *testing.T) {
-    result := make_b64_slice([]byte("AB"))
-    if len(result) != 4 {
-        t.Errorf("Length should have been 4")
-    }
-}
-
-func Test_make_b64_slice_for_input_A(t *testing.T) {
-    result := make_b64_slice([]byte("A"))
-    if len(result) != 4 {
-        t.Errorf("Length should have been 4")
-    }
-}
-
 func Test_encode_ABC(t *testing.T) {
     result := Base64enc("ABC")
     expected := "QUJD"
