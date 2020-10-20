@@ -1,7 +1,14 @@
 /**
- * Algorithm for picking a random element from a collection taking
- * selection probability into account. The motivation came from my
- * studies of genetic algorithms.
+ * Algorithm for picking a random element from a collection taking selection
+ * probability into account. The motivation came from my studies of genetic
+ * algorithms.
+ *
+ * Given an indexable collection of elements with associated probabilities,
+ * a random number between 0 and the sum of all probabilities is generated.
+ * The idea is to think of the elements as being stacked and then to find
+ * on which element that random number falls. As the elements on the stack
+ * are iterated upon, their probability is accumulated and the previously
+ * generated random number is comparted to the accumulated probability.
  *
  * Andre Zunino <neyzunino@gmail.com>
  * 20 October 2020
@@ -33,8 +40,8 @@ std::size_t prob_select(const std::vector<Character>& coll) {
     );
     std::uniform_real_distribution<float> dist{0.0f, prob_sum};
     std::size_t idx = 0;
-    float stacked_prob = 0.0f;
-    for (float rand_prob = dist(rng); idx < coll.size(); ++idx) {
+    float rand_prob = dist(rng);
+    for (float stacked_prob = 0.0f; idx < coll.size(); ++idx) {
         auto& elem = coll[idx];
         stacked_prob += elem.prob;
         if (rand_prob < stacked_prob) {
