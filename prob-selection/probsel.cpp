@@ -31,16 +31,10 @@ struct Character {
     int count = 0;
 };
 
-std::size_t prob_select(const std::vector<Character>& coll) {
-    float prob_sum = std::accumulate(
-        std::begin(coll),
-        std::end(coll),
-        0.0f,
-        [](float total, const auto& e) { return total + e.prob; }
-    );
-    std::uniform_real_distribution<float> dist{0.0f, prob_sum};
-    std::size_t idx = 0;
+template <typename Dist>
+std::size_t prob_select(const std::vector<Character>& coll, Dist& dist) {
     float rand_prob = dist(rng);
+    std::size_t idx = 0;
     for (float stacked_prob = 0.0f; idx < coll.size(); ++idx) {
         auto& elem = coll[idx];
         stacked_prob += elem.prob;
@@ -51,6 +45,15 @@ std::size_t prob_select(const std::vector<Character>& coll) {
     return idx;
 }
 
+float sum_of_probabilites(const std::vector<Character>& coll) {
+    return std::accumulate(
+        std::begin(coll),
+        std::end(coll),
+        0.0f,
+        [](float total, const auto& e) { return total + e.prob; }
+    );
+}
+
 int main() {
     std::vector<Character> characters{
         Character{"John", 0.5f},
@@ -58,9 +61,10 @@ int main() {
         Character{"Sadie", 0.3f}
     };
     
+    std::uniform_real_distribution<float> dist{0.0f, sum_of_probabilites(characters)};
     const std::size_t picks = 10000;
     for (std::size_t i = 0; i < picks; ++i) {
-        std::size_t pick = prob_select(characters);
+        std::size_t pick = prob_select(characters, dist);
         ++characters[pick].count;
     }
 
