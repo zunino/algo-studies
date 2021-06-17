@@ -18,14 +18,7 @@ import (
     "fmt"
 )
 
-func fib(n int) int64 {
-    if n < 2 {
-        return int64(n)
-    }
-    return fib(n-2) + fib(n-1)
-}
-
-func fib_memoized(n int, memo map[int]int64) int64 {
+func fibMemoized(n int, memo map[int]int64) int64 {
     memoized, ok := memo[n]
     if ok {
         return memoized
@@ -33,18 +26,14 @@ func fib_memoized(n int, memo map[int]int64) int64 {
     if n < 2 {
         return int64(n)
     }
-    f := fib_memoized(n-2, memo) + fib_memoized(n-1, memo)
+    f := fibMemoized(n-2, memo) + fibMemoized(n-1, memo)
     memo[n] = f
     return f
 }
 
 func main() {
-    // for i := 0; i < 42; i++ {
-    //     fmt.Printf("fib(%d) = %d\n", i, fib(i))
-    // }
-
-    memo := make(map[int]int64)
-    for i := 0; i < 42; i++ {
-        fmt.Printf("fib(%d) = %d\n", i, fib_memoized(i, memo))
+    for i := 0; i < 10; i++ {
+        memo := make(map[int]int64)
+        fmt.Printf("fib(%d) = %d\n", i, fibMemoized(i, memo))
     }
 }

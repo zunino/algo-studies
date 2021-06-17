@@ -5,8 +5,12 @@
  * implemented with a memoized recursive algorithm, I decided to write
  * a non-recursive implementation.
  *
+ * Posted a question to StackOverflow on 17 June 2021.
+ * https://stackoverflow.com/questions/68023637/
+ *
  * Andre Zunino <neyzunino@gmail.com>
- * 13 June 2021
+ * Created 13 June 2021
+ * Modified 17 June 2021
  */
 
 package main
@@ -15,13 +19,11 @@ import (
     "fmt"
 )
 
-func fib(n int) int {
-    f1 := 1
-    f2 := 0
+func fib(n int) int64 {
+    var f1 int64 = 1
+    var f2 int64 = 0
     for i := 0; i < n; i++ {
-        tmp := f2
-        f2 = f1 + f2
-        f1 = tmp
+        f1, f2 = f2, f1+f2
     }
     return f2
 }
