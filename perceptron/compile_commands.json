@@ -1,0 +1,7 @@
+[
+    {
+        "directory": "/home/zunino/Studies/algo-studies/perceptron",
+        "command": "g++ -std=c++20 -c -Wall -Wextra -pedantic -g -o main.o main.cpp",
+        "file": "src/main.cpp"
+    }
+]

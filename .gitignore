@@ -1,4 +1,5 @@
 .vscode/
-a.out
-*.swp
 eclipse-cdt-workspace/
+*.swp
+*.o
+a.out
