@@ -25,9 +25,10 @@ Perceptron create_perceptron(int argc, char* argv[]) {
 int main(int argc, char* argv[]) {
     auto perceptron = create_perceptron(argc, argv);
 
-    /* save_model(perceptron.get_weights(), "model.bin"); */
+    save_model(perceptron.get_weights(), "model.bin");
+    save_weights_as_pgm(perceptron.get_weights(), "model.pgm");
 
-    std::cout << "== Tests\n";
+    std::clog << "== Tests\n";
     std::vector<LabeledInput> test_dataset = make_labeled_dataset(TEST_DATASET_SIZE);
 
     std::size_t tp = 0;
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
 
     for (auto i : test_dataset) {
         /* print_layer(i.first); */
-        /* std::cout << '\n'; */
+        /* std::clog << '\n'; */
 
         bool fired = perceptron.predict(i.first);
         Label y_true = i.second;
@@ -54,14 +55,14 @@ int main(int argc, char* argv[]) {
     const float recall = tp / float(tp + fn);
     const float f1_score = 2 * (precision * recall / (precision + recall));
 
-    std::cout << "== Summary\n";
-    std::cout << "TP:        " << tp << '\n';
-    std::cout << "FP:        " << fp << '\n';
-    std::cout << "TN:        " << tn << '\n';
-    std::cout << "FN:        " << fn << '\n';
-    std::cout << "Accuracy:  " << std::setprecision(3) << accuracy << '\n';
-    std::cout << "Precision: " << std::setprecision(3) << precision << '\n';
-    std::cout << "Recall:    " << std::setprecision(3) << recall << '\n';
-    std::cout << "F1-Score:  " << std::setprecision(3) << f1_score << '\n';
+    std::clog << "== Summary\n";
+    std::clog << "TP:        " << tp << '\n';
+    std::clog << "FP:        " << fp << '\n';
+    std::clog << "TN:        " << tn << '\n';
+    std::clog << "FN:        " << fn << '\n';
+    std::clog << "Accuracy:  " << std::setprecision(3) << accuracy << '\n';
+    std::clog << "Precision: " << std::setprecision(3) << precision << '\n';
+    std::clog << "Recall:    " << std::setprecision(3) << recall << '\n';
+    std::clog << "F1-Score:  " << std::setprecision(3) << f1_score << '\n';
 }
 

@@ -2,6 +2,8 @@
 #include <fstream>
 
 #include "bmp.hpp"
+#include "data.hpp"
+#include "pgm.hpp"
 #include "io.hpp"
 
 void print_layer(const Layer& layer, std::ostream& os) {
@@ -29,6 +31,11 @@ void print_weights(const std::vector<float>& weights, std::ostream& os) {
 void save_layer_as_bmp(const Layer& layer, const char* file_path) {
     BmpFile bmp_file{file_path, INPUT_WIDTH, INPUT_HEIGHT};
     bmp_file.write(layer);
+}
+
+void save_weights_as_pgm(const std::vector<float>& weights, const char* file_path) {
+    PgmFile pgm_file{file_path, INPUT_WIDTH, INPUT_HEIGHT};
+    pgm_file.write(weights);
 }
 
 void save_model(const std::vector<float>& weights, const char* file_path) {

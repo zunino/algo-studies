@@ -55,17 +55,16 @@ private:
 
 struct BmpFile {
     BmpFile(const char* file_path, unsigned img_width, unsigned img_height);
-    void write(std::vector<float> img_data);
+    void write(const std::vector<float>& img_data);
     std::size_t file_size() const;
 private:
-    void write_headers();
+    void write_headers(std::ofstream& bmp_file);
     const char* file_path;
     unsigned img_width;
     unsigned img_height;
     BmpFileHeader file_header;
     BmpInfoHeader info_header;
     Bmp1BitColorHeader color_header;
-    std::ofstream bmp_file;
 };
 
 #endif // AZ_BMP_HPP_

@@ -1,6 +1,5 @@
 #include <bitset>
 #include <cmath>
-#include <iostream>
 
 #include "bmp.hpp"
 
@@ -8,9 +7,10 @@ BmpFile::BmpFile(const char* file_path, unsigned img_width, unsigned img_height)
 : file_path{file_path}, img_width{img_width}, img_height{img_height} {
 }
 
-void BmpFile::write(std::vector<float> img_data) {
+void BmpFile::write(const std::vector<float>& img_data) {
+    std::ofstream bmp_file;
     bmp_file.open(file_path, std::ios::binary);
-    write_headers();
+    write_headers(bmp_file);
     for (int row = img_height - 1; row >= 0; --row) {
         BmpScanLine scan_line;
         for (unsigned col = 0; col < img_width; ++col) {
@@ -18,10 +18,10 @@ void BmpFile::write(std::vector<float> img_data) {
         }
         bmp_file.write((const char*) &scan_line.buffer[0], scan_line.buffer.size());
     }
-    this->bmp_file.close();
+    bmp_file.close();
 }
 
-void BmpFile::write_headers() {
+void BmpFile::write_headers(std::ofstream& bmp_file) {
     file_header.file_size = file_size();
     char* p = (char*) &file_header;
     bmp_file.write(p, BMP_FILE_HEADER_LENGTH);

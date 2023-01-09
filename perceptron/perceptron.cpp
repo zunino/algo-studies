@@ -4,7 +4,8 @@
 
 #include "perceptron.hpp"
 
-Perceptron::Perceptron(float bias) : bias{bias}, output{0.0f} {
+Perceptron::Perceptron(float bias)
+: bias{bias}, weights(INPUT_WIDTH * INPUT_HEIGHT, 0.0f), output{0.0f} {
 }
 
 Perceptron::Perceptron(float bias, std::vector<float>&& weights) 
@@ -12,7 +13,6 @@ Perceptron::Perceptron(float bias, std::vector<float>&& weights)
 }
 
 void Perceptron::fit(const std::vector<LabeledInput>& labeled_input) {
-    this->weights.resize(INPUT_WIDTH * INPUT_HEIGHT);
     for (std::size_t x = 0; x < labeled_input.size(); ++x) {
         const Layer& sample = labeled_input[x].first;
         Label label = labeled_input[x].second;
@@ -26,9 +26,7 @@ void Perceptron::fit(const std::vector<LabeledInput>& labeled_input) {
         int factor = -1;
 
         if ((should_fire && !fired) || (!should_fire && fired)) {
-            if (!fired) {
-                factor = 1;
-            }
+            if (!fired) factor = 1;
             for (std::size_t i = 0; i < sample.size(); ++i) {
                 weights[i] += sample[i] * factor;
             }

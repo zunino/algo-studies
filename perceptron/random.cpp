@@ -3,9 +3,10 @@
 #include <random>
 #include <utility>
 
+inline const int SEED = 117;
+
 namespace {
-    std::random_device rd;
-    std::mt19937 randEng {rd()};
+    std::default_random_engine randEng{SEED};
 }
 
 int random(std::size_t from, std::size_t to) {
