@@ -3,3 +3,4 @@ eclipse-cdt-workspace/
 *.swp
 *.o
 a.out
+target/
