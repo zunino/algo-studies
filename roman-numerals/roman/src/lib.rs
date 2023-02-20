@@ -8,56 +8,64 @@
 // 20 February 2023
 //
 
-struct Group {
-    one_symbol: char,
-    five_symbol: char,
-    next_one_symbol: char,
+struct Group<'a> {
+    one_symbol: &'a str,
+    five_symbol: &'a str,
+    next_one_symbol: &'a str,
 }
 
 const GROUPS: [Group; 3] = [
     Group {
-        one_symbol: 'I',
-        five_symbol: 'V',
-        next_one_symbol: 'X',
+        one_symbol: "I",
+        five_symbol: "V",
+        next_one_symbol: "X",
     },
     Group {
-        one_symbol: 'X',
-        five_symbol: 'L',
-        next_one_symbol: 'C',
+        one_symbol: "X",
+        five_symbol: "L",
+        next_one_symbol: "C",
     },
     Group {
-        one_symbol: 'C',
-        five_symbol: 'D',
-        next_one_symbol: 'M',
+        one_symbol: "C",
+        five_symbol: "D",
+        next_one_symbol: "M",
     },
 ];
 
-fn digit_to_roman(digit: usize, group: &Group) -> String {
-    match digit {
-        1..=3 => group.one_symbol.to_string().repeat(digit),
-        4 => format!("{}{}", group.one_symbol, group.five_symbol),
-        5 => group.five_symbol.to_string(),
-        6..=8 => format!(
-            "{}{}",
-            group.five_symbol,
-            group.one_symbol.to_string().repeat(digit - 5)
-        ),
-        9 => format!("{}{}", group.one_symbol, group.next_one_symbol),
-        _ => String::new(),
+fn digit_to_roman(digit: usize, group_idx: usize) -> String {
+    match group_idx {
+        0..=2 => {
+            let group = &GROUPS[group_idx];
+            match digit {
+                1..=3 => group.one_symbol.repeat(digit),
+                4 => format!("{}{}", group.one_symbol, group.five_symbol),
+                5 => group.five_symbol.to_string(),
+                6..=8 => format!(
+                    "{}{}",
+                    group.five_symbol,
+                    group.one_symbol.repeat(digit - 5)
+                ),
+                9 => format!("{}{}", group.one_symbol, group.next_one_symbol),
+                _ => String::new(),
+            }
+        }
+        3 => match digit {
+            1..=3 => "M".repeat(digit),
+            4..=9 => format!("{}'", digit_to_roman(digit, 0)),
+            _ => String::new(),
+        },
+        _ => panic!("That's too big! (PAUSE)"),
     }
 }
 
 pub fn decimal_to_roman(mut n: usize) -> String {
-    if n > 999 {
-        panic!("Only up to 999 for now");
-    }
-    let mut group: usize = 0;
+    let mut group_idx: usize = 0;
     let mut roman = String::new();
     while n > 0 {
         let digit: usize = n % 10;
-        roman = digit_to_roman(digit, &GROUPS[group]) + &roman;
+        roman = digit_to_roman(digit, group_idx) + &roman;
         n /= 10;
-        group += 1;
+        group_idx += 1;
     }
     roman
 }
@@ -92,7 +100,7 @@ mod tests {
 
     #[test]
     #[should_panic]
-    fn test_maximum_supported_decimal_is_999() {
-        decimal_to_roman(1000);
+    fn test_maximum_supported_decimal_is_9999() {
+        decimal_to_roman(10000);
     }
 }
