@@ -23,6 +23,8 @@ Arena arena_create(size_t capacity) {
 void arena_destroy(Arena *arena) {
     free(arena->data);
     arena->data = NULL;
+    arena->size = 0;
+    arena->capacity = 0;
 }
 
 void *arena_alloc(Arena *arena, size_t size) {
@@ -44,8 +46,10 @@ int *arena_int(Arena *arena, int value) {
 
 int main() {
     Arena a = arena_create(8);
+    // int allocation
     int *n1 = (int *) arena_alloc(&a, sizeof (int));
     *n1 = 10;
+    // int allocation with helper function
     int *n2 = arena_int(&a, 20);
     /* int *n3 = arena_int(&a, 30); */
     printf("n1 = %d\n", *n1);
