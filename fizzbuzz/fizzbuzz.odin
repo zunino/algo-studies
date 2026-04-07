@@ -15,6 +15,7 @@ import "core:testing"
 
 fizzbuzz :: proc(n: int) -> string {
   sb := strings.builder_make_len_cap(0, len("fizzbuzz"))
+  defer strings.builder_destroy(&sb)
   if n % 3 == 0 {
     strings.write_string(&sb, "fizz")
   }
